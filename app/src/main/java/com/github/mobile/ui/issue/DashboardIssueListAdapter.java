@@ -21,6 +21,7 @@ import android.view.View;
 
 import com.github.mobile.R;
 import com.github.mobile.api.model.Issue;
+import com.github.mobile.core.commit.StyledTextFactory;
 import com.github.mobile.core.issue.IssueUtils;
 import com.github.mobile.util.AvatarLoader;
 import com.github.mobile.util.TypefaceUtils;
@@ -91,7 +92,7 @@ public class DashboardIssueListAdapter extends
 
         setText(2, issue.title);
 
-        updateReporter(issue.user.login, issue.created_at, 4);
+        updateReporter(issue.user.login, issue.created_at, 4, new StyledTextFactory());
 
         setGone(5, !IssueUtils.isPullRequest(issue));
         setNumber(7, issue.comments);

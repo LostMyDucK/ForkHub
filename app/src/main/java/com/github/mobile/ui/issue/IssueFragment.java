@@ -61,6 +61,8 @@ import com.github.mobile.accounts.AccountUtils;
 import com.github.mobile.api.model.LineComment;
 import com.github.mobile.api.model.TimelineEvent;
 import com.github.mobile.api.model.ReactionSummary;
+import com.github.mobile.core.commit.StyledTextFactory;
+import com.github.mobile.core.commit.StyledTextInterface;
 import com.github.mobile.core.issue.DeleteCommentTask;
 import com.github.mobile.core.issue.EditAssigneeTask;
 import com.github.mobile.core.issue.EditLabelsTask;
@@ -206,7 +208,7 @@ public class IssueFragment extends DialogFragment {
             protected void onSuccess(Issue editedIssue) throws Exception {
                 super.onSuccess(editedIssue);
 
-                updateHeader(editedIssue);
+                updateHeader(editedIssue, new StyledTextFactory());
             }
         };
 
@@ -217,7 +219,7 @@ public class IssueFragment extends DialogFragment {
             protected void onSuccess(Issue editedIssue) throws Exception {
                 super.onSuccess(editedIssue);
 
-                updateHeader(editedIssue);
+                updateHeader(editedIssue, new StyledTextFactory());
             }
         };
 
@@ -228,7 +230,7 @@ public class IssueFragment extends DialogFragment {
             protected void onSuccess(Issue editedIssue) throws Exception {
                 super.onSuccess(editedIssue);
 
-                updateHeader(editedIssue);
+                updateHeader(editedIssue, new StyledTextFactory());
             }
         };
 
@@ -238,7 +240,7 @@ public class IssueFragment extends DialogFragment {
             protected void onSuccess(Issue editedIssue) throws Exception {
                 super.onSuccess(editedIssue);
 
-                updateHeader(editedIssue);
+                updateHeader(editedIssue, new StyledTextFactory());
             }
         };
     }
@@ -263,7 +265,7 @@ public class IssueFragment extends DialogFragment {
             updateList(issue, items);
         else {
             if (issue != null)
-                updateHeader(issue);
+                updateHeader(issue, new StyledTextFactory());
             refreshIssue();
         }
     }
@@ -360,7 +362,7 @@ public class IssueFragment extends DialogFragment {
         list.setAdapter(adapter);
     }
 
-    private void updateHeader(final Issue issue) {
+    private void updateHeader(final Issue issue, StyledTextFactory styledTextFactory) {
         if (!isUsable())
             return;
 
@@ -389,7 +391,7 @@ public class IssueFragment extends DialogFragment {
 
         boolean open = STATE_OPEN.equals(issue.getState());
         if (!open) {
-            StyledText text = new StyledText();
+            StyledTextInterface text = styledTextFactory.makeStyledText();
             if (isPullRequest && issue.getPullRequest().isMerged()) {
                 text.bold(getString(R.string.merged));
                 stateText.setBackgroundResource(R.color.state_background_merged);
@@ -400,7 +402,7 @@ public class IssueFragment extends DialogFragment {
             Date closedAt = issue.getClosedAt();
             if (closedAt != null)
                 text.append(' ').append(closedAt);
-            stateText.setText(text);
+            stateText.setText((StyledText)text);
         }
         ViewUtils.setGone(stateText, open);
 
@@ -436,10 +438,10 @@ public class IssueFragment extends DialogFragment {
 
         final User assignee = issue.getAssignee();
         if (assignee != null) {
-            StyledText name = new StyledText();
+            StyledTextInterface name = styledTextFactory.makeStyledText();
             name.bold(assignee.getLogin());
             name.append(' ').append(getString(R.string.assigned));
-            assigneeText.setText(name);
+            assigneeText.setText((StyledText)name);
             assigneeAvatar.setVisibility(VISIBLE);
             avatars.bind(assigneeAvatar, assignee);
         } else {
@@ -456,11 +458,11 @@ public class IssueFragment extends DialogFragment {
 
         if (issue.getMilestone() != null) {
             Milestone milestone = issue.getMilestone();
-            StyledText milestoneLabel = new StyledText();
+            StyledTextInterface milestoneLabel = styledTextFactory.makeStyledText();
             milestoneLabel.append(getString(R.string.milestone_prefix));
             milestoneLabel.append(' ');
             milestoneLabel.bold(milestone.getTitle());
-            milestoneText.setText(milestoneLabel);
+            milestoneText.setText((StyledText)milestoneLabel);
             float closed = milestone.getClosedIssues();
             float total = closed + milestone.getOpenIssues();
             if (total > 0) {
@@ -517,7 +519,7 @@ public class IssueFragment extends DialogFragment {
         adapter.removeHeader(loadingView);
 
         headerView.setVisibility(VISIBLE);
-        updateHeader(issue);
+        updateHeader(issue, new StyledTextFactory());
     }
 
     @Override
@@ -595,7 +597,7 @@ public class IssueFragment extends DialogFragment {
         case ISSUE_EDIT:
             Issue editedIssue = (Issue) data.getSerializableExtra(EXTRA_ISSUE);
             bodyImageGetter.encode(editedIssue.getId(), editedIssue.getBodyHtml());
-            updateHeader(editedIssue);
+            updateHeader(editedIssue, new StyledTextFactory());
             break;
         case COMMENT_CREATE:
         case COMMENT_EDIT:

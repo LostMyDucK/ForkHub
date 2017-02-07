@@ -38,8 +38,10 @@ import com.github.kevinsawicki.wishlist.ViewUtils;
 import com.github.mobile.R;
 import com.github.mobile.core.commit.CommitCompareTask;
 import com.github.mobile.core.commit.CommitUtils;
+import com.github.mobile.core.commit.StyledTextFactory;
 import com.github.mobile.ui.DialogFragment;
 import com.github.mobile.ui.HeaderFooterListAdapter;
+import com.github.mobile.ui.StyledText;
 import com.github.mobile.util.AvatarLoader;
 import com.github.mobile.util.ToastUtils;
 import com.google.inject.Inject;
@@ -196,7 +198,7 @@ public class CommitCompareListFragment extends DialogFragment implements
         View fileHeader = inflater.inflate(
                 R.layout.commit_compare_file_details_header, null);
         ((TextView) fileHeader.findViewById(R.id.tv_commit_file_summary))
-                .setText(CommitUtils.formatStats(files));
+                .setText((StyledText)CommitUtils.formatStats(files, new StyledTextFactory()));
         adapter.addHeader(fileHeader);
     }
 

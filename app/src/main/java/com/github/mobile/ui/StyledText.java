@@ -26,6 +26,7 @@ import android.text.style.URLSpan;
 import android.view.View;
 import android.view.View.OnClickListener;
 
+import com.github.mobile.core.commit.StyledTextInterface;
 import com.github.mobile.util.TimeUtils;
 
 import java.util.Date;
@@ -34,7 +35,7 @@ import java.util.Locale;
 /**
  * Helpers on top of {@link SpannableStringBuilder}
  */
-public class StyledText extends SpannableStringBuilder {
+public class StyledText extends SpannableStringBuilder implements StyledTextInterface {
 
     /**
      * Append text and span to end of this text

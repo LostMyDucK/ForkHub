@@ -21,6 +21,7 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.github.mobile.R;
+import com.github.mobile.core.commit.StyledTextFactory;
 import com.github.mobile.core.issue.IssueUtils;
 import com.github.mobile.util.AvatarLoader;
 import com.github.mobile.util.TypefaceUtils;
@@ -82,7 +83,7 @@ public class RepositoryIssueListAdapter extends IssueListAdapter<Issue> {
 
         setText(1, issue.getTitle());
 
-        updateReporter(issue.getUser().getLogin(), issue.getCreatedAt(), 3);
+        updateReporter(issue.getUser().getLogin(), issue.getCreatedAt(), 3, new StyledTextFactory());
 
         setGone(4, !IssueUtils.isPullRequest(issue));
         setNumber(6, issue.getComments());

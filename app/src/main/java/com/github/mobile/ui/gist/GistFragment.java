@@ -43,6 +43,8 @@ import com.github.kevinsawicki.wishlist.ViewUtils;
 import com.github.mobile.R;
 import com.github.mobile.accounts.AccountUtils;
 import com.github.mobile.core.OnLoadListener;
+import com.github.mobile.core.commit.StyledTextFactory;
+import com.github.mobile.core.commit.StyledTextInterface;
 import com.github.mobile.core.gist.FullGist;
 import com.github.mobile.core.gist.GistStore;
 import com.github.mobile.core.gist.RefreshGistTask;
@@ -165,7 +167,7 @@ public class GistFragment extends DialogFragment implements OnItemClickListener 
         gist = store.getGist(gistId);
 
         if (gist != null) {
-            updateHeader(gist);
+            updateHeader(gist, new StyledTextFactory());
             updateFiles(gist);
         }
 
@@ -188,23 +190,23 @@ public class GistFragment extends DialogFragment implements OnItemClickListener 
         return login != null && login.equals(owner.getLogin());
     }
 
-    private void updateHeader(Gist gist) {
+    private void updateHeader(Gist gist, StyledTextFactory styledTextFactory) {
         Date createdAt = gist.getCreatedAt();
         if (createdAt != null) {
-            StyledText text = new StyledText();
+            StyledTextInterface text = styledTextFactory.makeStyledText();
             text.append(getString(R.string.prefix_created));
             text.append(createdAt);
-            created.setText(text);
+            created.setText((StyledText)text);
             created.setVisibility(VISIBLE);
         } else
             created.setVisibility(GONE);
 
         Date updatedAt = gist.getUpdatedAt();
         if (updatedAt != null && !updatedAt.equals(createdAt)) {
-            StyledText text = new StyledText();
+            StyledTextInterface text = styledTextFactory.makeStyledText();
             text.append(getString(R.string.prefix_updated));
             text.append(updatedAt);
-            updated.setText(text);
+            updated.setText((StyledText)text);
             updated.setVisibility(VISIBLE);
         } else
             updated.setVisibility(GONE);
@@ -372,7 +374,7 @@ public class GistFragment extends DialogFragment implements OnItemClickListener 
         adapter.removeHeader(loadingView);
 
         headerView.setVisibility(VISIBLE);
-        updateHeader(gist);
+        updateHeader(gist, new StyledTextFactory());
 
         updateFiles(gist);
     }

@@ -33,6 +33,8 @@ import android.text.style.DynamicDrawableSpan;
 import android.widget.TextView;
 
 import com.github.mobile.R;
+import com.github.mobile.core.commit.StyledTextFactory;
+import com.github.mobile.core.commit.StyledTextInterface;
 import com.github.mobile.ui.StyledText;
 import com.github.mobile.util.ServiceUtils;
 
@@ -152,7 +154,7 @@ public class LabelDrawableSpan extends DynamicDrawableSpan {
                         rhs.getName());
             }
         });
-        setText(view, sortedLabels);
+        setText(view, sortedLabels, new StyledTextFactory());
     }
 
     /**
@@ -162,10 +164,10 @@ public class LabelDrawableSpan extends DynamicDrawableSpan {
      * @param label
      */
     public static void setText(final TextView view, final Label label) {
-        setText(view, new Label[] { label });
+        setText(view, new Label[] { label }, new StyledTextFactory());
     }
 
-    private static void setText(final TextView view, final Label[] labels) {
+    private static void setText(final TextView view, final Label[] labels, StyledTextFactory styledTextFactory) {
         final Resources resources = view.getResources();
         final float paddingTop = ServiceUtils.getPixels(resources, PADDING_TOP);
         final float paddingLeft = ServiceUtils.getPixels(resources,
@@ -193,7 +195,7 @@ public class LabelDrawableSpan extends DynamicDrawableSpan {
         }
 
         final float textSize = view.getTextSize();
-        final StyledText text = new StyledText();
+        final StyledTextInterface text = styledTextFactory.makeStyledText();
         for (int i = 0; i < labels.length; i++) {
             Rect bounds = new Rect();
             bounds.right = Math.round(nameWidths[i] + paddingLeft
@@ -208,7 +210,7 @@ public class LabelDrawableSpan extends DynamicDrawableSpan {
             if (i + 1 < labels.length)
                 text.append(' ');
         }
-        view.setText(text);
+        view.setText((StyledText)text);
     }
 
     private final Resources resources;

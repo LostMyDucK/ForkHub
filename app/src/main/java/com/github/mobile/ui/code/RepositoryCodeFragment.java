@@ -41,6 +41,8 @@ import com.github.mobile.core.code.FullTree;
 import com.github.mobile.core.code.FullTree.Entry;
 import com.github.mobile.core.code.FullTree.Folder;
 import com.github.mobile.core.code.RefreshTreeTask;
+import com.github.mobile.core.commit.StyledTextFactory;
+import com.github.mobile.core.commit.StyledTextInterface;
 import com.github.mobile.core.ref.RefUtils;
 import com.github.mobile.ui.DialogFragment;
 import com.github.mobile.ui.DialogFragmentActivity;
@@ -109,7 +111,7 @@ public class RepositoryCodeFragment extends DialogFragment implements
         if (tree == null || folder == null)
             refreshTree(null);
         else
-            setFolder(tree, folder);
+            setFolder(tree, folder,  new StyledTextFactory());
     }
 
     @Override
@@ -146,7 +148,7 @@ public class RepositoryCodeFragment extends DialogFragment implements
                 super.onSuccess(fullTree);
 
                 if (folder == null || folder.parent == null)
-                    setFolder(fullTree, fullTree.root);
+                    setFolder(fullTree, fullTree.root,  new StyledTextFactory());
                 else {
                     // Look for current folder in new tree or else reset to root
                     Folder current = folder;
@@ -163,9 +165,9 @@ public class RepositoryCodeFragment extends DialogFragment implements
                             break;
                     }
                     if (refreshed != null)
-                        setFolder(fullTree, refreshed);
+                        setFolder(fullTree, refreshed,  new StyledTextFactory());
                     else
-                        setFolder(fullTree, fullTree.root);
+                        setFolder(fullTree, fullTree.root,  new StyledTextFactory());
                 }
             }
 
@@ -251,13 +253,13 @@ public class RepositoryCodeFragment extends DialogFragment implements
      */
     public boolean onBackPressed() {
         if (folder != null && folder.parent != null) {
-            setFolder(tree, folder.parent);
+            setFolder(tree, folder.parent,  new StyledTextFactory());
             return true;
         } else
             return false;
     }
 
-    private void setFolder(final FullTree tree, final Folder folder) {
+    private void setFolder(final FullTree tree, final Folder folder, StyledTextFactory styledTextFactory) {
         this.folder = folder;
         this.tree = tree;
 
@@ -275,7 +277,7 @@ public class RepositoryCodeFragment extends DialogFragment implements
             int textLightColor = getResources().getColor(R.color.text_light);
             final String fullPath = repository.getName() + "/" + folder.entry.getPath();
             final String[] segments = fullPath.split("/");
-            StyledText text = new StyledText();
+            StyledTextInterface text = styledTextFactory.makeStyledText();
             for (int i = 0; i < segments.length - 1; i++) {
                 final int index = i;
                 text.url(segments[i], new OnClickListener() {
@@ -288,12 +290,12 @@ public class RepositoryCodeFragment extends DialogFragment implements
                             if (clicked == null)
                                 return;
                         }
-                        setFolder(tree, clicked);
+                        setFolder(tree, clicked, new StyledTextFactory());
                     }
                 }).append(' ').foreground('/', textLightColor).append(' ');
             }
             text.bold(segments[segments.length - 1]);
-            pathView.setText(text);
+            pathView.setText((StyledText)text);
             if (!pathShowing) {
                 adapter.addHeader(pathHeaderView);
                 pathShowing = true;
@@ -315,7 +317,7 @@ public class RepositoryCodeFragment extends DialogFragment implements
             return;
 
         if (entry instanceof Folder)
-            setFolder(tree, (Folder) entry);
+            setFolder(tree, (Folder) entry, new StyledTextFactory());
         else
             startActivity(BranchFileViewActivity.createIntent(repository,
                     tree.branch, entry.entry.getPath(), entry.entry.getSha()));

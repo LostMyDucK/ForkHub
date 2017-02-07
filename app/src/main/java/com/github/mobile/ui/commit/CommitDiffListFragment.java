@@ -54,6 +54,8 @@ import com.github.mobile.core.commit.CommitUtils;
 import com.github.mobile.core.commit.FullCommit;
 import com.github.mobile.core.commit.FullCommitFile;
 import com.github.mobile.core.commit.RefreshCommitTask;
+import com.github.mobile.core.commit.StyledTextFactory;
+import com.github.mobile.core.commit.StyledTextInterface;
 import com.github.mobile.ui.DialogFragment;
 import com.github.mobile.ui.HeaderFooterListAdapter;
 import com.github.mobile.ui.LightAlertDialog;
@@ -270,7 +272,7 @@ public class CommitDiffListFragment extends DialogFragment implements
         return committer != null && !committer.equals(author);
     }
 
-    private void addCommitDetails(RepositoryCommit commit) {
+    private void addCommitDetails(RepositoryCommit commit, StyledTextFactory styledTextFactory) {
         adapter.addHeader(commitHeader);
 
         commitMessage.setText(commit.getCommit().getMessage());
@@ -281,14 +283,14 @@ public class CommitDiffListFragment extends DialogFragment implements
         if (commitAuthor != null) {
             CommitUtils.bindAuthor(commit, avatars, authorAvatar);
             authorName.setText(commitAuthor);
-            StyledText styledAuthor = new StyledText();
+            StyledTextInterface styledAuthor = styledTextFactory.makeStyledText();
             styledAuthor.append(getString(R.string.authored));
 
             Date commitAuthorDate = CommitUtils.getAuthorDate(commit);
             if (commitAuthorDate != null)
                 styledAuthor.append(' ').append(commitAuthorDate);
 
-            authorDate.setText(styledAuthor);
+            authorDate.setText((StyledText)styledAuthor);
             ViewUtils.setGone(authorArea, false);
         } else
             ViewUtils.setGone(authorArea, true);
@@ -296,14 +298,14 @@ public class CommitDiffListFragment extends DialogFragment implements
         if (isDifferentCommitter(commitAuthor, commitCommitter)) {
             CommitUtils.bindCommitter(commit, avatars, committerAvatar);
             committerName.setText(commitCommitter);
-            StyledText styledCommitter = new StyledText();
+            StyledTextInterface styledCommitter = styledTextFactory.makeStyledText();
             styledCommitter.append(getString(R.string.committed));
 
             Date commitCommitterDate = CommitUtils.getCommitterDate(commit);
             if (commitCommitterDate != null)
                 styledCommitter.append(' ').append(commitCommitterDate);
 
-            committerDate.setText(styledCommitter);
+            committerDate.setText((StyledText)styledCommitter);
             ViewUtils.setGone(committerArea, false);
         } else
             ViewUtils.setGone(committerArea, true);
@@ -313,12 +315,12 @@ public class CommitDiffListFragment extends DialogFragment implements
         View fileHeader = inflater.inflate(R.layout.commit_file_details_header,
                 null);
         ((TextView) fileHeader.findViewById(R.id.tv_commit_file_summary))
-                .setText(CommitUtils.formatStats(commit.getFiles()));
+                .setText((StyledText)CommitUtils.formatStats(commit.getFiles(), new StyledTextFactory()));
         adapter.addHeader(fileHeader);
     }
 
     private void addCommitParents(RepositoryCommit commit,
-            LayoutInflater inflater) {
+            LayoutInflater inflater, StyledTextFactory styledTextFactory) {
         List<Commit> parents = commit.getParents();
         if (parents == null || parents.isEmpty())
             return;
@@ -329,10 +331,10 @@ public class CommitDiffListFragment extends DialogFragment implements
                     .findViewById(R.id.tv_commit_id);
             parentIdText.setPaintFlags(parentIdText.getPaintFlags()
                     | UNDERLINE_TEXT_FLAG);
-            StyledText parentText = new StyledText();
+            StyledTextInterface parentText = styledTextFactory.makeStyledText();
             parentText.append(getString(R.string.parent_prefix));
             parentText.monospace(CommitUtils.abbreviate(parent));
-            parentIdText.setText(parentText);
+            parentIdText.setText((StyledText)parentText);
             adapter.addHeader(parentView, parent, true);
         }
     }
@@ -341,8 +343,8 @@ public class CommitDiffListFragment extends DialogFragment implements
         ViewUtils.setGone(progress, true);
         ViewUtils.setGone(list, false);
 
-        addCommitDetails(commit);
-        addCommitParents(commit, getActivity().getLayoutInflater());
+        addCommitDetails(commit, new StyledTextFactory());
+        addCommitParents(commit, getActivity().getLayoutInflater(), new StyledTextFactory());
     }
 
     private void updateList(RepositoryCommit commit,

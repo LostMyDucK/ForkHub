@@ -28,6 +28,8 @@ import android.widget.TextView;
 import com.github.kevinsawicki.wishlist.SingleTypeAdapter;
 import com.github.kevinsawicki.wishlist.ViewUtils;
 import com.github.mobile.R;
+import com.github.mobile.core.commit.StyledTextFactory;
+import com.github.mobile.core.commit.StyledTextInterface;
 import com.github.mobile.ui.StyledText;
 import com.github.mobile.util.AvatarLoader;
 import com.github.mobile.util.TypefaceUtils;
@@ -140,12 +142,12 @@ public abstract class IssueListAdapter<V> extends SingleTypeAdapter<V> {
      * @param date
      * @param viewIndex
      */
-    protected void updateReporter(String reporter, Date date, int viewIndex) {
-        StyledText reporterText = new StyledText();
+    protected void updateReporter(String reporter, Date date, int viewIndex, StyledTextFactory styledTextFactory) {
+        StyledTextInterface reporterText = styledTextFactory.makeStyledText();
         reporterText.bold(reporter);
         reporterText.append(' ');
         reporterText.append(date);
-        setText(viewIndex, reporterText);
+        setText(viewIndex, (StyledText)reporterText);
     }
 
     /**

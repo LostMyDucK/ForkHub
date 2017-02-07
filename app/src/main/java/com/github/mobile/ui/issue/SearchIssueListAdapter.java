@@ -22,6 +22,7 @@ import android.view.View;
 
 import com.github.kevinsawicki.wishlist.ViewUtils;
 import com.github.mobile.R;
+import com.github.mobile.core.commit.StyledTextFactory;
 import com.github.mobile.util.AvatarLoader;
 import com.github.mobile.util.TypefaceUtils;
 
@@ -94,7 +95,7 @@ public class SearchIssueListAdapter extends IssueListAdapter<SearchIssue> {
 
         setText(1, issue.getTitle());
 
-        updateReporter(issue.getUser(), issue.getCreatedAt(), 3);
+        updateReporter(issue.getUser(), issue.getCreatedAt(), 3, new StyledTextFactory());
 
         setNumber(6, issue.getComments());
 
