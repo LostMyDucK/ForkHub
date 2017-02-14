@@ -28,6 +28,8 @@ import android.support.v7.app.ActionBar;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.github.mobile.BuilderFactory;
+import com.github.mobile.BuilderInterface;
 import com.github.mobile.Intents.Builder;
 import com.github.mobile.R;
 import com.github.mobile.ui.DialogFragmentActivity;
@@ -51,8 +53,9 @@ public class CommitCompareViewActivity extends DialogFragmentActivity {
      * @return intent
      */
     public static Intent createIntent(final Repository repository,
-            final String base, final String head) {
-        Builder builder = new Builder("commits.compare.VIEW");
+                                      final String base, final String head, BuilderFactory builderFactory) {
+        //Builder builder = new Builder("commits.compare.VIEW");
+        BuilderInterface builder = builderFactory.makeBuilder("commits.compare.VIEW");
         builder.add(EXTRA_BASE, base);
         builder.add(EXTRA_HEAD, head);
         builder.repo(repository);
@@ -67,7 +70,7 @@ public class CommitCompareViewActivity extends DialogFragmentActivity {
      * @return intent
      */
     public static Intent createIntent(final Repository repository, final String head) {
-        return createIntent(repository, null, head);
+        return createIntent(repository, null, head, new BuilderFactory());
     }
 
     private Repository repository;

@@ -21,6 +21,8 @@ import android.os.AsyncTask;
 
 import com.github.mobile.RequestReader;
 import com.github.mobile.RequestWriter;
+import com.github.mobile.RequestWriterFactory;
+import com.github.mobile.RequestWriterInterface;
 
 import java.io.File;
 import java.io.Serializable;
@@ -142,7 +144,7 @@ public class RecentRepositories implements Comparator<Repository>, Serializable 
 
                 @Override
                 protected Void doInBackground(Void... params) {
-                    save();
+                    save(new RequestWriterFactory(file,VERSION));
                     return null;
                 }
             }.execute();
@@ -154,10 +156,11 @@ public class RecentRepositories implements Comparator<Repository>, Serializable 
      *
      * @return this recent list
      */
-    public RecentRepositories save() {
+    public RecentRepositories save(RequestWriterFactory requestWriterFactory) {
         final LinkedHashSet<Long> save = ids;
+        RequestWriterInterface RequestWriter = requestWriterFactory.makeRequestWriter(file,VERSION);
         if (save != null)
-            new RequestWriter(file, VERSION).write(save);
+             RequestWriter.write(save);
         return this;
     }
 

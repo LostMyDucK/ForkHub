@@ -18,6 +18,7 @@ package com.github.mobile.tests.repo;
 import static com.github.mobile.ui.repo.RecentRepositories.MAX_SIZE;
 import android.test.AndroidTestCase;
 
+import com.github.mobile.RequestWriterFactory;
 import com.github.mobile.ui.repo.RecentRepositories;
 
 import org.eclipse.egit.github.core.User;
@@ -66,7 +67,7 @@ public class RecentRepositoriesTest extends AndroidTestCase {
         long id = 1234;
         recent1.add(id);
         assertTrue(recent1.contains(id));
-        recent1.save();
+        recent1.save(new RequestWriterFactory());
         RecentRepositories recent2 = new RecentRepositories(getContext(), org);
         assertTrue(recent2.contains(id));
     }
@@ -88,7 +89,7 @@ public class RecentRepositoriesTest extends AndroidTestCase {
         recent2.add(id2);
         assertTrue(recent2.contains(id2));
 
-        recent2.save();
+        recent2.save(new RequestWriterFactory());
         recent1 = new RecentRepositories(getContext(), org1);
         assertFalse(recent1.contains(id2));
     }

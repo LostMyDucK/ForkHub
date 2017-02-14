@@ -117,7 +117,7 @@ public class CreateCommentActivity extends
 
                     finish(comment);
                 }
-            }.start();
+            }.create();
         }
     }
 

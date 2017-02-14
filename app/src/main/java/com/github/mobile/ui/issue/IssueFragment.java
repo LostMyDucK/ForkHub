@@ -56,6 +56,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.github.kevinsawicki.wishlist.ViewUtils;
+import com.github.mobile.BuilderFactory;
 import com.github.mobile.R;
 import com.github.mobile.accounts.AccountUtils;
 import com.github.mobile.api.model.LineComment;
@@ -655,7 +656,7 @@ public class IssueFragment extends DialogFragment {
                 String baseSha = base.getSha();
                 String headSha = head.getSha();
                 Repository repo = base.getRepo();
-                startActivity(CommitCompareViewActivity.createIntent(repo, baseSha, headSha));
+                startActivity(CommitCompareViewActivity.createIntent(repo, baseSha, headSha, new BuilderFactory()));
             } else {
                 String headSha = head.getSha();
                 Repository repo = head.getRepo();

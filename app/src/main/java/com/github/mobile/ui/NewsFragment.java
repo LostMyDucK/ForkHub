@@ -31,6 +31,7 @@ import android.widget.ListView;
 
 import com.github.kevinsawicki.wishlist.SingleTypeAdapter;
 import com.github.kevinsawicki.wishlist.ViewFinder;
+import com.github.mobile.BuilderFactory;
 import com.github.mobile.R;
 import com.github.mobile.core.gist.GistEventMatcher;
 import com.github.mobile.core.issue.IssueEventMatcher;
@@ -222,7 +223,7 @@ public abstract class NewsFragment extends PagedItemFragment<Event> {
             String head = payload.getHead();
             if (!TextUtils.isEmpty(base) && !TextUtils.isEmpty(head))
                 startActivity(CommitCompareViewActivity.createIntent(repo,
-                        base, head));
+                        base, head, new BuilderFactory()));
         } else {
             Commit commit = commits.get(0);
             String sha = commit != null ? commit.getSha() : null;

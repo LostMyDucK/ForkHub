@@ -28,7 +28,7 @@ import java.util.zip.GZIPOutputStream;
 /**
  * Request writer
  */
-public class RequestWriter {
+public class RequestWriter implements RequestWriterInterface {
 
     private static final String TAG = "RequestWriter";
 
@@ -47,7 +47,7 @@ public class RequestWriter {
         version = formatVersion;
     }
 
-    private void createDirectory(final File dir) {
+    public void createDirectory(final File dir) {
         if (dir != null && !dir.exists())
             dir.mkdirs();
     }

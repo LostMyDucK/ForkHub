@@ -79,7 +79,7 @@ public class CreateCommentTask extends ProgressDialogTask<Comment> {
      *
      * @return this task
      */
-    public CreateCommentTask start() {
+    public CreateCommentTask create() {
         showIndeterminate(R.string.creating_comment);
 
         execute();

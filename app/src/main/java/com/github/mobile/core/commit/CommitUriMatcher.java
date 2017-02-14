@@ -18,6 +18,7 @@ package com.github.mobile.core.commit;
 import android.content.Intent;
 import android.text.TextUtils;
 
+import com.github.mobile.BuilderFactory;
 import com.github.mobile.core.repo.RepositoryUriMatcher;
 import com.github.mobile.ui.commit.CommitCompareViewActivity;
 import com.github.mobile.ui.commit.CommitViewActivity;
@@ -74,7 +75,7 @@ public class CommitUriMatcher {
         case 1:
             return CommitCompareViewActivity.createIntent(repo, refs[0]);
         case 2:
-            return CommitCompareViewActivity.createIntent(repo, refs[0], refs[1]);
+            return CommitCompareViewActivity.createIntent(repo, refs[0], refs[1], new BuilderFactory());
         }
 
         return null;

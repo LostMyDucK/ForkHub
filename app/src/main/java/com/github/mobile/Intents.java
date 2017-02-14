@@ -204,7 +204,7 @@ public class Intents {
      * Builder for generating an intent configured with extra data such as an
      * issue, repository, or gist
      */
-    public static class Builder {
+    public static class Builder  implements BuilderInterface {
 
         private final Intent intent;
 

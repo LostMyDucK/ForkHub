@@ -197,8 +197,8 @@ public class CommitCompareListFragment extends DialogFragment implements
             LayoutInflater inflater) {
         View fileHeader = inflater.inflate(
                 R.layout.commit_compare_file_details_header, null);
-        ((TextView) fileHeader.findViewById(R.id.tv_commit_file_summary))
-                .setText((StyledText)CommitUtils.formatStats(files, new StyledTextFactory()));
+        //  ((TextView) fileHeader.findViewById(R.id.tv_commit_file_summary))
+        //          .setText((StyledText)CommitUtils.formatStats(files)           , new StyledTextFactory()));
         adapter.addHeader(fileHeader);
     }
 

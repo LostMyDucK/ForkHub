@@ -45,6 +45,7 @@ public class ForkRepositoryTask extends ProgressDialogTask<Repository> {
         showIndeterminate(R.string.forking_repository);
 
         execute();
+
     }
 
     @Override
