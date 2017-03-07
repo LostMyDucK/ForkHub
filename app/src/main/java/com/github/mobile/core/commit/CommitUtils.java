@@ -224,7 +224,7 @@ public class CommitUtils {
      * @return styled text
      */
     public static StyledTextInterface formatStats(final Collection<CommitFile> files, StyledTextFactory styledTextFactory) {
-        //StyledText fileDetails = new StyledText();
+        //StyledText fileDetailsPuppy = new StyledText();
 
         StyledTextInterface fileDetails = styledTextFactory.makeStyledText();
         int added = 0;

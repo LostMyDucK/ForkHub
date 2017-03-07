@@ -25,6 +25,8 @@ import android.util.Log;
 import com.github.mobile.RequestFuture;
 import com.github.mobile.RequestReader;
 import com.github.mobile.RequestWriter;
+import com.github.mobile.RequestWriterFactory;
+import com.github.mobile.RequestWriterInterface;
 import com.github.mobile.accounts.AuthenticatedUserTask;
 import com.github.mobile.core.issue.IssueFilter;
 import com.github.mobile.persistence.OrganizationRepositories.Factory;
@@ -108,8 +110,10 @@ public class AccountDataManager {
      * @param data
      * @return this manager
      */
-    private AccountDataManager write(File file, Object data) {
-        new RequestWriter(file, FORMAT_VERSION).write(data);
+    private AccountDataManager write(File file, Object data, RequestWriterFactory requestWriterFactory) {
+        //RequestWriter checking = new RequestWriter(file, FORMAT_VERSION);
+        RequestWriter requestWriter = (RequestWriter)requestWriterFactory.makeRequestWriter(file, FORMAT_VERSION);
+        requestWriter.write(data);
         return this;
     }
 
@@ -231,7 +235,7 @@ public class AccountDataManager {
         if (filters == null)
             filters = new HashSet<IssueFilter>();
         if (filters.add(filter))
-            write(cache, filters);
+            write(cache, filters, new RequestWriterFactory());
     }
 
     /**
@@ -274,7 +278,7 @@ public class AccountDataManager {
         final File cache = new File(root, "issue_filters.ser");
         Collection<IssueFilter> filters = read(cache);
         if (filters != null && filters.remove(filter))
-            write(cache, filters);
+            write(cache, filters, new RequestWriterFactory());
     }
 
     /**

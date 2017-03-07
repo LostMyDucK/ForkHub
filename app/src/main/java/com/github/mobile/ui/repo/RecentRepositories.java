@@ -158,6 +158,7 @@ public class RecentRepositories implements Comparator<Repository>, Serializable 
      */
     public RecentRepositories save(RequestWriterFactory requestWriterFactory) {
         final LinkedHashSet<Long> save = ids;
+        //RequestWriter testing = new RequestWriter(file, VERSION);
         RequestWriterInterface RequestWriter = requestWriterFactory.makeRequestWriter(file,VERSION);
         if (save != null)
              RequestWriter.write(save);
