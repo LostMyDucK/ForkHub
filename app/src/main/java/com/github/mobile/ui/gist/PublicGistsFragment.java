@@ -24,10 +24,10 @@ import org.eclipse.egit.github.core.client.PageIterator;
 /**
  * Fragment to display a list of public Gists
  */
-public class PublicGistsFragment extends GistsFragment {
+public class PublicGistsFragment extends GistsFragment implements GistsFragmentInterface {
 
     @Override
-    protected ResourcePager<Gist> createPager() {
+    public ResourcePager<Gist> createPager() {
         return new GistPager(store) {
 
             @Override

@@ -32,7 +32,7 @@ import org.eclipse.egit.github.core.client.PageIterator;
 /**
  * Fragment to display a list of Gists
  */
-public class MyGistsFragment extends GistsFragment {
+public class MyGistsFragment extends GistsFragment implements GistsFragmentInterface {
 
     @Inject
     private Provider<GitHubAccount> accountProvider;
@@ -49,7 +49,7 @@ public class MyGistsFragment extends GistsFragment {
     }
 
     @Override
-    protected ResourcePager<Gist> createPager() {
+    public ResourcePager<Gist> createPager() {
         return new GistPager(store) {
 
             @Override

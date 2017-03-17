@@ -45,7 +45,7 @@ import org.eclipse.egit.github.core.service.RepositoryService;
 /**
  * Fragment to display a list of {@link Repository} instances
  */
-public class SearchRepositoryListFragment extends NewPagedItemFragment<Repository> {
+public class SearchRepositoryListFragment extends NewPagedItemFragment<Repository> implements SearchInterface {
 
     @Inject
     private RepositoryService service;

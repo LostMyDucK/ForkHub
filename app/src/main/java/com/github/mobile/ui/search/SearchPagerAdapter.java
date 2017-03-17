@@ -54,14 +54,8 @@ public class SearchPagerAdapter extends FragmentPagerAdapter {
 
     @Override
     public Fragment getItem(int position) {
-        switch (position) {
-        case 0:
-            return new SearchRepositoryListFragment();
-        case 1:
-            return new SearchUserListFragment();
-        default:
-            return null;
-        }
+        SearchFactory searchFactory= new SearchFactory();
+        return (Fragment) searchFactory.makeSearchFragment(position);
     }
 
     @Override

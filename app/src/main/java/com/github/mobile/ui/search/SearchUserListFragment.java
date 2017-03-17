@@ -43,7 +43,7 @@ import java.util.List;
 /**
  * Fragment to display a list of {@link User} instances
  */
-public class SearchUserListFragment extends NewPagedItemFragment<User> {
+public class SearchUserListFragment extends NewPagedItemFragment<User> implements SearchInterface{
 
     @Inject
     private SearchService service;

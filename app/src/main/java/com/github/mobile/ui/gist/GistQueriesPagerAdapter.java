@@ -47,16 +47,8 @@ public class GistQueriesPagerAdapter extends FragmentPagerAdapter {
 
     @Override
     public Fragment getItem(int position) {
-        switch (position) {
-        case 0:
-            return new MyGistsFragment();
-        case 1:
-            return new StarredGistsFragment();
-        case 2:
-            return new PublicGistsFragment();
-        default:
-            return null;
-        }
+        GistsFragmentFactory gistsFragmentFactory = new GistsFragmentFactory();
+        return (GistsFragment)gistsFragmentFactory.makeGistFragment(position);
     }
 
     @Override
